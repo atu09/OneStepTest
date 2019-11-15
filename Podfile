@@ -6,7 +6,7 @@ target 'OneStepTest' do
   use_frameworks!
 
   # Pods for OneStepTest
-  pod "MBCircularProgressBar"
+  # pod "MBCircularProgressBar"
 
   target 'OneStepTestTests' do
     inherit! :search_paths

@@ -15,36 +15,38 @@
 
 @implementation TimerVC
 
-float totalSeconds = 10;
-float currentSeconds = 0.0;
-
-// flag, whether the countdown started or not
-bool isStarted = false;
-
-bool isBlink = false;
-
-NSTimer *countdownTimer, *blinkTimer;;
-CAGradientLayer *gradientTimer;
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    gradientTimer = [Utility getGradient];
-    gradientTimer.frame = self.view.bounds;
-    [self.view.layer insertSublayer:gradientTimer atIndex:0];
-    
-    // Resetting the values for progress bar
-    self.pbView.value = currentSeconds;
-    self.pbView.maxValue = totalSeconds;
+    [self initialSetup];
     [self checkTimer];
+}
+
+-(void)initialSetup {
+    // preset the current seconds to zero
+    [self setCurrentSeconds:0];
     
+    // preset the total seconds to 10
+    [self setTotalSeconds:10];
+    
+    // initializing the gradient layer
+    [self setGradientLayer: [Utility getGradient]];
+    
+    // setting the gradient layer frame with the controller view
+    self.gradientLayer.frame = self.view.bounds;
+    // add the gradient layer to the controller view for background design
+    [self.view.layer insertSublayer:self.gradientLayer atIndex:0];
+    
+    // Preset the values for progress bar
+    self.pbView.value = self.currentSeconds;
+    self.pbView.maxValue = self.totalSeconds;
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     
-    // if Orientation changes, it is must to change frame of gradient.
-    gradientTimer.frame = self.view.bounds;
+    // if Orientation changes, frame of gradient layer should also be updated.
+    self.gradientLayer.frame = self.view.bounds;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -53,98 +55,82 @@ CAGradientLayer *gradientTimer;
 
 // Start the countdown / Stop the countdoun
 - (IBAction)startTimer:(id)sender {
-    if (isStarted) {
+    if (self.isStarted) {
         [self stopTimer];
     } else {
-        isStarted = true;
+        [self setIsStarted:true];
         
-        countdownTimer = [NSTimer scheduledTimerWithTimeInterval:0.01
-                                                 target:self
-                                               selector:@selector(countdown:)
-                                               userInfo:nil
-                                                repeats:TRUE];
+        [self setCountdownTimer: [NSTimer scheduledTimerWithTimeInterval:0.01
+                                                                  target:self
+                                                                selector:@selector(countdown:)
+                                                                userInfo:nil
+                                                                 repeats:true]];
         [self checkTimer];
     }
 }
 
-// Start the blink animation when 0 seconds left
-- (void)startBlink {
-    blinkTimer = [NSTimer scheduledTimerWithTimeInterval:0.5f
-                                                      target:self
-                                                    selector:@selector(blink:)
-                                                    userInfo:nil
-                                                     repeats:TRUE];
-}
-
-// Here, blinkTimer is calling this Selector method to update progress bar and time on every single eteration.
-- (void)blink: (NSTimer *)timer {
-    isBlink = !isBlink;
-    [UIView animateWithDuration:0.01 animations:^{
-        if (isBlink) {
-            [self.lblTimer setTextColor: UIColor.redColor];
-        } else {
-            [self.lblTimer setTextColor: UIColor.whiteColor];
-        }
-    }];
-}
-
-// Stop the blinking
-- (void) stopBlink {
-    [blinkTimer invalidate];
-    blinkTimer = nil;
-    [self.lblTimer setTextColor: UIColor.whiteColor];
-    
-}
-
 // Checking the status count down and do necessary UI changes
 - (void)checkTimer {
-    [self.btnReset setEnabled:!isStarted];
-    [self.btnStart setEnabled:currentSeconds != 10];
-    [self.btnStart setTitle: isStarted ? @"STOP" : @"START" forState: UIControlStateNormal];
+    [self.btnReset setEnabled:!self.isStarted];
+    [self.btnStart setEnabled:self.currentSeconds != self.totalSeconds];
+    [self.btnStart setTitle: self.isStarted ? @"STOP" : @"START" forState: UIControlStateNormal];
+    if (self.currentSeconds >= self.totalSeconds) {
+        [self.lblTimer setTextColor: UIColor.redColor];
+    } else {
+        [self.lblTimer setTextColor: UIColor.whiteColor];
+    }
 }
 
 // Stop the countdown
 - (void)stopTimer {
-    [countdownTimer invalidate];
-    countdownTimer = nil;
-    isStarted = false;
+    [self.countdownTimer invalidate];
+    [self setCountdownTimer:nil];
+    [self setIsStarted:false];
     [self checkTimer];
 }
 
-// Here, countdownTimer is calling this Selector method to update progress bar and time on every single eteration.
+// CountdownTimer is calling this Selector method to update progress bar and time on every single eteration.
 - (void)countdown:(NSTimer *)timer {
-    currentSeconds = currentSeconds + timer.timeInterval;
-    
-    if (currentSeconds > 10) {
-        currentSeconds = 10;
+    [self setCurrentSeconds: self.currentSeconds + timer.timeInterval];
+    if (self.currentSeconds > self.totalSeconds) {
+        [self setCurrentSeconds: self.totalSeconds];
         [self stopTimer];
-        [self startBlink];
     }
     [UIView animateWithDuration:0.01 animations:^{
-        [self setTimer:currentSeconds];
-        [self.pbView setValue: currentSeconds];
+        [self setTimer: self.currentSeconds];
+        [self.pbView setValue: self.currentSeconds];
     }];
 }
 
 // Reset the timer.
 - (IBAction)resetTimer:(id)sender {
-    currentSeconds = 0.0;
+    // reset the current seconds to 0
+    [self setCurrentSeconds:0.0];
+    // stop the countdown
     [self stopTimer];
-    [self stopBlink];
     
+    // animating the progress bar to reset the position
     [UIView animateWithDuration:1.f animations:^{
-        [self setTimer:currentSeconds];
-        [self.pbView setValue: currentSeconds];
+        [self setTimer: self.currentSeconds];
+        [self.pbView setValue: self.currentSeconds];
     }];
 }
 
+// Update label and display countdown timer in XX:XX format
 -(void)setTimer: (float) seconds {
-    float secondsLeft = totalSeconds - seconds;
-    NSString *formatString = @"%.2f";
-    if (secondsLeft < 10) {
-        formatString = @"0%.2f";
-    }
-    NSString* textToPresent = [NSString stringWithFormat:formatString, secondsLeft];
+    float secondsLeft = self.totalSeconds - seconds;
+    
+    // converted the secondsLeft float value in string
+    NSString *text = [NSString stringWithFormat:@"%.2f", secondsLeft];
+    
+    // seperated the decimal and non decimal degits
+    NSArray *array = [text componentsSeparatedByString: @"."];
+    
+    long nonDecimal = [array[0] integerValue];
+    long decimal = [array[1] integerValue];
+    
+    // formated into XX:XX
+    NSString* textToPresent = [NSString stringWithFormat:@"%02d:%02d", (int)nonDecimal, (int)decimal];
     [self.lblTimer setText:textToPresent];
 }
 

@@ -19,6 +19,8 @@
 		8497907B203309A400F656ED /* OneStepTestUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8497907A203309A400F656ED /* OneStepTestUITests.m */; };
 		BC859BFB38AB86614142F285 /* Pods_OneStepTestTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9CE47DA3D15FFDD00A1AA84 /* Pods_OneStepTestTests.framework */; };
 		F6319870237E198500DDE49E /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = F631986F237E198500DDE49E /* Utility.m */; };
+		F646D5B1237F008F00273187 /* CircularProgressBarLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = F646D5AD237F008F00273187 /* CircularProgressBarLayer.m */; };
+		F646D5B2237F008F00273187 /* CircularProgressBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = F646D5AE237F008F00273187 /* CircularProgressBarView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +68,10 @@
 		E3C63618E88C95E358E752B5 /* Pods_OneStepTestUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OneStepTestUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F631986E237E198500DDE49E /* Utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
 		F631986F237E198500DDE49E /* Utility.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Utility.m; sourceTree = "<group>"; };
+		F646D5AD237F008F00273187 /* CircularProgressBarLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircularProgressBarLayer.m; sourceTree = "<group>"; };
+		F646D5AE237F008F00273187 /* CircularProgressBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircularProgressBarView.m; sourceTree = "<group>"; };
+		F646D5AF237F008F00273187 /* CircularProgressBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircularProgressBarView.h; sourceTree = "<group>"; };
+		F646D5B0237F008F00273187 /* CircularProgressBarLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircularProgressBarLayer.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +137,7 @@
 		84979054203309A400F656ED /* OneStepTest */ = {
 			isa = PBXGroup;
 			children = (
+				F646D5AC237F008400273187 /* progressbar */,
 				F6177965237D99510033BA1C /* controllers */,
 				F6177966237D996C0033BA1C /* delegate */,
 				F6319871237E204200DDE49E /* helpers */,
@@ -209,6 +216,17 @@
 			name = helpers;
 			sourceTree = "<group>";
 		};
+		F646D5AC237F008400273187 /* progressbar */ = {
+			isa = PBXGroup;
+			children = (
+				F646D5B0237F008F00273187 /* CircularProgressBarLayer.h */,
+				F646D5AD237F008F00273187 /* CircularProgressBarLayer.m */,
+				F646D5AF237F008F00273187 /* CircularProgressBarView.h */,
+				F646D5AE237F008F00273187 /* CircularProgressBarView.m */,
+			);
+			name = progressbar;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -220,7 +238,6 @@
 				8497904E203309A400F656ED /* Sources */,
 				8497904F203309A400F656ED /* Frameworks */,
 				84979050203309A400F656ED /* Resources */,
-				03519F539B094F673D9F5A50 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -340,24 +357,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		03519F539B094F673D9F5A50 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-OneStepTest/Pods-OneStepTest-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/MBCircularProgressBar/MBCircularProgressBar.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBCircularProgressBar.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OneStepTest/Pods-OneStepTest-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		42A1EA67DBEEB74C4023ED2D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -420,9 +419,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				8497905D203309A400F656ED /* TimerVC.m in Sources */,
+				F646D5B1237F008F00273187 /* CircularProgressBarLayer.m in Sources */,
 				F6319870237E198500DDE49E /* Utility.m in Sources */,
 				8497905A203309A400F656ED /* AppDelegate.m in Sources */,
 				84979057203309A400F656ED /* main.m in Sources */,
+				F646D5B2237F008F00273187 /* CircularProgressBarView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
